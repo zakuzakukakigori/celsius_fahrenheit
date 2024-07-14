@@ -1,6 +1,7 @@
 use almost;
-
 use clap::Parser;
+
+use std::process;
 
 #[derive(Copy, Clone)]
 enum TemperatureArg {
@@ -33,7 +34,9 @@ fn main() {
 
     match (args.celsius, args.fahrenheit) {
         (TemperatureArg::Derive, TemperatureArg::Derive) => {
-            eprintln!("no temperature information provided")
+            eprintln!("no temperature information provided");
+
+            process::exit(1)
         }
 
         (TemperatureArg::Value(celsius), TemperatureArg::Derive) => {
