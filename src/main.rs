@@ -1,3 +1,5 @@
+use almost;
+
 use clap::Parser;
 
 #[derive(Copy, Clone)]
@@ -26,29 +28,27 @@ struct Args {
     fahrenheit: TemperatureArg,
 }
 
-const ERROR_MARGIN: f64 = 10e-5;
-
 fn main() {
     let args: Args = Args::parse();
 
     match (args.celsius, args.fahrenheit) {
         (TemperatureArg::Derive, TemperatureArg::Derive) => {
             eprintln!("no temperature information provided")
-        },
+        }
 
         (TemperatureArg::Value(celsius), TemperatureArg::Derive) => {
             println!("{} fahrenheit", (celsius * 9.0 / 5.0) + 32.0)
-        },
+        }
 
         (TemperatureArg::Derive, TemperatureArg::Value(fahrenheit)) => {
             println!("{} celcius", (fahrenheit - 32.0) * 5.0 / 9.0)
-        },
+        }
 
         (TemperatureArg::Value(celsius), TemperatureArg::Value(fahrenheit)) => {
             let f_in_c = (fahrenheit - 32.0) * 5.0 / 9.0;
-            
-            if (celsius - f_in_c).abs() < ERROR_MARGIN {
-                println!("equal (below {ERROR_MARGIN} as error margin)")
+
+            if almost::equal(celsius, f_in_c) {
+                println!("equal (almost)")
             } else {
                 println!("not equal")
             }
